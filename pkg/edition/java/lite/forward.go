@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math/rand"
 	"net"
 	"strings"
 	"time"
@@ -156,6 +157,14 @@ func findRoute(
 	}
 
 	tryBackends := route.Backend.Copy()
+
+	// Should shuffle the backend slice to get a random order every time.
+	rand.NewSource(time.Now().UnixNano())
+	rand.Shuffle(len(tryBackends), func(i, j int) {
+		tryBackends[i], tryBackends[j] = tryBackends[j],
+			tryBackends[i]
+	})
+
 	nextBackend = func() (string, logr.Logger, bool) {
 		if len(tryBackends) == 0 {
 			return "", log, false
