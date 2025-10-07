@@ -27,7 +27,7 @@ COPY --from=build /workspace/gate /
 ENTRYPOINT ["/gate"]
 
 # Move binary into final image (jre variant Gate image - temurin-21-jre)
-FROM --platform=$BUILDPLATFORM eclipse-temurin:21-jre AS jre
+FROM --platform=$BUILDPLATFORM eclipse-temurin:21-jre-alpine AS jre
 COPY --from=build /workspace/gate /usr/local/bin/gate
 ENV PATH=/opt/java/openjdk/bin:$PATH
 ENTRYPOINT ["/usr/local/bin/gate"]
